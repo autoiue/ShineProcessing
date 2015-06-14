@@ -16,6 +16,9 @@ class StatusBar{
 		}
 		fill(#FFFFFF);
 		text(s, 4, ui.HEIGHT - 6);
+		textAlign(RIGHT);
+		text(frameRate, ui.WIDTH - 4, ui.HEIGHT - 6);
+		textAlign(LEFT);
 	}
 
 	void set(String key, String content){

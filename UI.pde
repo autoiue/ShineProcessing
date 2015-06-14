@@ -8,7 +8,8 @@ class UI{
 	public static final int HEIGHT = 767;
 
 	UI(){
-		size(WIDTH, HEIGHT);
+		size(WIDTH, HEIGHT, OPENGL);
+		frameRate(120);
 		visualizer  = new Visualizer();
 		statusBar = new StatusBar();
 		mono = loadFont("SourceCodePro-Regular-10.vlw");
