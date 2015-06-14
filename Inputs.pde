@@ -19,6 +19,7 @@ class Inputs {
 	}
 
 	void registerCallback(Callable callback, String event){
+		println("Registered: "+event);
 		if(callbacks.indexOf(callback) == -1){	
 			callbacks.add(callback);
 		}
@@ -48,4 +49,4 @@ class Inputs {
 			trigger("keyboard." + key);
 		}
 	}
-}
+};
