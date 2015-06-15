@@ -65,9 +65,15 @@ void draw(){
 
 	output.live(liveModeImage ? modeImage : liveImage);
 	ui.update(modeImage);
-	println(modeImage);
+	inputs.reset();
 }
 
 void keyPressed(){
 	inputs.keyPressed(key, keyCode);
+}
+void keyReleased(){
+	inputs.keyReleased(key, keyCode);
+}
+void mouseReleased(){
+	inputs.mouseRelease();
 }

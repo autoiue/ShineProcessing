@@ -12,10 +12,10 @@ class Visualizer{
 		for(int i = 0; i < devices.size(); i++){
 			Device dev = devices.get(i);
 			Color devColor = image.getColor(i);
-			fill(devColor.R, devColor.G, devColor.B);
+			fill(devColor.R+devColor.W/2, devColor.G+devColor.W/2, devColor.B+devColor.W/2);
 			noStroke();
 
-			if(mousePressed && mouseButton == LEFT && ui.mouseIn(IMAGE_OFFSET + dev.x, IMAGE_OFFSET + dev.y, dev.w, dev.h)){
+			if(inputs.mouseReleased && mouseButton == LEFT && ui.mouseIn(IMAGE_OFFSET + dev.x, IMAGE_OFFSET + dev.y, dev.w, dev.h)){
 				inputs.trigger("visualizer.click", dev);
 			}
 

@@ -6,6 +6,8 @@ class Inputs {
 	private long lastEventTime = 0;
 	private int minTimeBetweenEvent = 30;
 
+	boolean mouseReleased = false;
+
 	Callable unbound = new Callable(){
 		void call(Object data){
 			println(lastEvent + ": event unbound");
@@ -16,6 +18,10 @@ class Inputs {
 		callbacks = new ArrayList<Callable>();
 		events = new IntDict();
 		callbacks.add(unbound);
+	}
+
+	void reset(){
+		mouseReleased = false;
 	}
 
 	void registerCallback(Callable callback, String event){
@@ -48,5 +54,17 @@ class Inputs {
 		}else{
 			trigger("keyboard." + key);
 		}
+	}
+
+	void keyReleased(char key, int keyCode){
+		if(key == CODED){
+			trigger("keyboard.r." + keyCode);
+		}else{
+			trigger("keyboard.r." + key);
+		}
+	}
+
+	void mouseRelease(){
+		mouseReleased = true;
 	}
 };
