@@ -47,13 +47,14 @@ class Image{
 
 	Color getColor(int dev){
 		if(devices.get(dev).isRGBW()){
-			return new Color(values[dev][0],values[dev][1],values[dev][2]);
+			return new Color(values[dev][0],values[dev][1],values[dev][2], values[dev][3]);
 		}else if(devices.get(dev).isOneChannel()){
-			return new Color(values[dev][0],values[dev][0],values[dev][0]);
+			return new Color(values[dev][0],values[dev][0],values[dev][0], values[dev][0]);
 		}else{
 			return new Color(values[dev][0] == 1 ? 255 : 0);
 		}
 	}
+
 
 	JSONArray export(){
 		JSONArray JImage = new JSONArray();
