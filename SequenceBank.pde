@@ -39,12 +39,20 @@ class SequenceBank {
 		return new Image(imageZero);
 	}
 
+	Sequence getSequence(int is){
+		return sequences.get(is);
+	}
+
 	void editImage(int is, int im, int id, Color c){
 		sequences.get(is).editImage(im, id, c);
 	}
 
 	void editImage(int is, int im, int id, boolean b){
 		sequences.get(is).editImage(im, id, b);
+	}
+
+	void editImage(int is, int im, int id, int c){
+		sequences.get(is).editImage(im, id, c);
 	}
 
 	void toggleDevice(int is, int im, int id){
@@ -77,6 +85,27 @@ class SequenceBank {
 
 	int getSize(){
 		return sequences.size();
+	}
+
+	ArrayList<int[]> getFlattenDeviceAddressesThatMatchColor(Color c){
+		boolean first = true;
+		ArrayList<int[]> values = new ArrayList<int[]>();
+		for(int is = 0; is < sequences.size(); is++){
+			for(int im = 0; im < sequences.get(is).size();im ++){
+				for(int id = 0; id < devices.size(); id++){
+					if(devices.get(id).isRGBW()){
+						if(sequences.get(is).getImage(im).values[id][0] == c.R &&
+							sequences.get(is).getImage(im).values[id][1] == c.G &&
+							sequences.get(is).getImage(im).values[id][2] == c.B &&
+							sequences.get(is).getImage(im).values[id][3] == c.W
+						){
+							values.add(new int[]{is, im, id});
+						}
+					}
+				}
+			}
+		}
+		return values;
 	}
 
 	JSONObject exportBank(){

@@ -32,4 +32,8 @@ class Color{
 	void setW(int v){
 		W = min(255, max(0, v));
 	}
+
+	int[] toArray(){
+		return new  int[]{R,G,B,W};
+	}
 };

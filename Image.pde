@@ -55,6 +55,14 @@ class Image{
 		}
 	}
 
+	int getOneChannel(int dev){
+			return values[dev][0];
+	}
+
+	boolean getBinary(int dev){
+			return values[dev][0] == 1;
+	}
+
 
 	JSONArray export(){
 		JSONArray JImage = new JSONArray();

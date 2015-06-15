@@ -40,6 +40,10 @@ class Sequence{
 		images.get(im).editDevice(id, b);
 	}
 
+	void editImage(int im, int id, int c){
+		images.get(im).editDevice(id, c);
+	}
+
 	void toggleDevice(int im, int id){
 		images.get(im).toggleDevice(id);
 	}

@@ -8,6 +8,10 @@ class SequenceEditor extends Interactable{
 	int currentImage  = 0;
 	int currentSequence = 0;
 
+	boolean colorCopy = false;
+
+	ArrayList<int[]> similarColorsAddress;
+
 
 	SequenceEditor(){
 
@@ -26,10 +30,17 @@ class SequenceEditor extends Interactable{
 			put("keyboard.W", new Callable(){void call(Object o){newSequence();}});
 			put("keyboard.D", new Callable(){void call(Object o){delImage();}});
 			put("keyboard.R", new Callable(){void call(Object o){delSequence();}});
+			put("keyboard.18", new Callable(){void call(Object o){enableColorCopy();}});
+			put("keyboard.r.18", new Callable(){void call(Object o){disableColorCopy();}});
 
 			put("visualizer.click", new Callable(){void call(Object o){selectDevice((Device)o);}});
 			put("colorChooser.current.click", new Callable(){void call(Object o){setColor((Color)o);}});	
-			put("colorChooser.onoff.click", new Callable(){void call(Object o){setBinary((Binary)o);}});
+			put("colorChooser.R.click", new Callable(){void call(Object o){setColor((Color)o);}});	
+			put("colorChooser.G.click", new Callable(){void call(Object o){setColor((Color)o);}});	
+			put("colorChooser.B.click", new Callable(){void call(Object o){setColor((Color)o);}});	
+			put("colorChooser.W.click", new Callable(){void call(Object o){setColor((Color)o);}});	
+			put("colorChooser.b.click", new Callable(){void call(Object o){setBinary((Binary)o);}});	
+			put("colorChooser.OC.click", new Callable(){void call(Object o){setOneChannel((OneChannel)o);}});
 		}};
 
 		super.toggle = "keyboard.a";
@@ -139,22 +150,57 @@ class SequenceEditor extends Interactable{
 
 	void selectDevice(Device dev){
 		int selectedDevice = devices.indexOf(dev);
+
 		if(currentDevice == selectedDevice && devices.get(selectedDevice).isBinary()){
 			sequenceBank.toggleDevice(currentSequence, currentImage, currentDevice);
 		}
+		
 		currentDevice = selectedDevice;
+		dev = devices.get(currentDevice);
+		if(colorCopy){
+			if(dev.isRGBW()){
+				setColor(cc.getColor());	
+			}else if(dev.isBinary()){	
+				setBinary(cc.getBinary());
+			}else if(dev.isOneChannel()){ 
+				setOneChannel(cc.getOneChannel());
+			}
+		}else{
+			if(dev.isRGBW()){
+				cc.setColor(sequenceBank.getImage(currentSequence, currentImage).getColor(currentDevice));	
+			}else if(dev.isBinary()){	
+				cc.setBinary(sequenceBank.getImage(currentSequence, currentImage).getBinary(currentDevice));
+			}else if(dev.isOneChannel()){ 
+				cc.setOneChannel(sequenceBank.getImage(currentSequence, currentImage).getOneChannel(currentDevice));
+			}
+		}
+		updateCurrentImage();
 		updateStatusBar();
 	}
 
 	void setColor(Color c){
 		if(devices.get(currentDevice).isRGBW())
 			sequenceBank.editImage(currentSequence, currentImage, currentDevice,  c);
+		if(colorCopy){
+			for(int i = 0; i < similarColorsAddress.size(); i++){
+				sequenceBank.editImage(similarColorsAddress.get(i)[0], similarColorsAddress.get(i)[1], similarColorsAddress.get(i)[2], c);
+			}
+		}
+		updateCurrentImage();
+	}
+
+	void setOneChannel(OneChannel c){
+		setOneChannel(c.get());
+	}
+
+	void setOneChannel(int c){
+		if(devices.get(currentDevice).isOneChannel())
+			sequenceBank.editImage(currentSequence, currentImage, currentDevice,  c);
 		updateCurrentImage();
 	}
 
 	void setBinary(Binary b){
 		setBinary(b.get());
-		updateCurrentImage();
 	}
 
 	void setBinary(boolean b){
@@ -168,5 +214,16 @@ class SequenceEditor extends Interactable{
 		ui.statusBar.draw();
 		saveJSONObject(sequenceBank.exportBank(), "data/tmp.json");
 		ui.statusBar.remove("SAVING");
+	}
+
+	void enableColorCopy(){
+		if(!colorCopy)
+			similarColorsAddress = sequenceBank.getFlattenDeviceAddressesThatMatchColor(cc.getColor());
+		colorCopy = true;
+	}
+
+	void disableColorCopy(){
+		colorCopy = false;
+		similarColorsAddress = null;
 	}
 };
